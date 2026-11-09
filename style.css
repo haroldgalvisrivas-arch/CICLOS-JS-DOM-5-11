@@ -1,479 +1,292 @@
-/* =========================================================
-   ciclos-js · style.css
-   Vice City al atardecer (estilo GTA VI):
-   cielo amarillo → naranja → rosa neón → violeta,
-   sol en el horizonte, palmeras en silueta y HUD turquesa.
-
-   Cubre: index, ejemplos, ejercicio1-8 y reto.
-   Roles por color:  rosa = enunciado · naranja = entrada
-                     turquesa = resultados
-   ========================================================= */
-
-@import url("https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap");
-
 :root {
-  --noche:     #14062b;
-  --violeta:   #5a1a9a;
-  --rosa:      #ff2e88;
-  --sol:       #ff8a3d;
-  --amarillo:  #ffd25e;
-  --oceano:    #2de2e6;
-  --crema:     #fff3e6;
-
-  --panel:     rgba(20, 6, 43, 0.78);
-  --hud:       rgba(8, 2, 20, 0.88);
-  --atardecer: linear-gradient(180deg, var(--amarillo) 0%, var(--sol) 38%, var(--rosa) 72%, #a31fd1 100%);
-
-  --fuente-titulo: "Anton", "Impact", sans-serif;
-  --fuente-menu:   "Barlow Condensed", "Arial Narrow", sans-serif;
-  --fuente-texto:  "Barlow", system-ui, sans-serif;
-  --fuente-mono:   ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
-
-  color-scheme: dark;
-  accent-color: var(--rosa);
+  --bg-color: #eef5ff;
+  --bg-alt: #f9fbff;
+  --panel-color: #ffffff;
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary-color: #14b8a6;
+  --accent-color: #7c3aed;
+  --text-color: #1f2937;
+  --muted-color: #5f6f8c;
+  --border-color: #dfe9f8;
+  --soft-shadow: 0 18px 40px rgba(37, 99, 235, 0.10);
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  --max-width: 1100px;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html {
-  background: var(--noche);
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  padding-bottom: 2rem;
-  font-family: var(--fuente-texto);
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--crema);
-}
-
-::selection { background: var(--rosa); color: #fff; }
-
-/* ---------- Escenario fijo: cielo, sol y palmeras ---------- */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background:
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20360%20500%27%3E%3Cg%20fill%3D%27%230c0220%27%3E%3Cpath%20d%3D%27M120%20500%20C140%20420%20160%20300%20192%20158%20L206%20160%20C186%20300%20176%20420%20182%20500%20Z%27/%3E%3Cpath%20d%3D%27M200%20155%20C150%20100%2070%20110%2010%20190%20C60%20140%20130%20128%20204%20166%20Z%27/%3E%3Cpath%20d%3D%27M200%20155%20C160%2080%20100%2050%2040%2070%20C100%2070%20150%20105%20202%20168%20Z%27/%3E%3Cpath%20d%3D%27M198%20154%20C185%2090%20150%2040%20110%2020%20C150%2060%20172%20105%20200%20168%20Z%27/%3E%3Cpath%20d%3D%27M202%20154%20C225%2090%20270%2050%20320%2055%20C270%2070%20235%20110%20204%20168%20Z%27/%3E%3Cpath%20d%3D%27M204%20156%20C250%20100%20330%20100%20355%20170%20C318%20128%20250%20125%20204%20168%20Z%27/%3E%3Cpath%20d%3D%27M204%20160%20C260%20150%20320%20190%20340%20260%20C305%20205%20255%20185%20202%20172%20Z%27/%3E%3Cpath%20d%3D%27M198%20160%20C140%20150%2080%20195%2060%20265%20C95%20205%20145%20185%20200%20172%20Z%27/%3E%3Cpath%20d%3D%27M200%20152%20C196%20100%20205%2055%20232%2020%20C218%2062%20212%20105%20206%20164%20Z%27/%3E%3Ccircle%20cx%3D%27195%27%20cy%3D%27170%27%20r%3D%277%27/%3E%3Ccircle%20cx%3D%27210%27%20cy%3D%27172%27%20r%3D%277%27/%3E%3C/g%3E%3C/svg%3E") left -3vw bottom -2vh / auto 62vh no-repeat,
-    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20360%20500%27%3E%3Cg%20fill%3D%27%230c0220%27%3E%3Cg%20transform%3D%27translate%28360%200%29%20scale%28-1%201%29%27%3E%3Cpath%20d%3D%27M120%20500%20C140%20420%20160%20300%20192%20158%20L206%20160%20C186%20300%20176%20420%20182%20500%20Z%27/%3E%3Cpath%20d%3D%27M200%20155%20C150%20100%2070%20110%2010%20190%20C60%20140%20130%20128%20204%20166%20Z%27/%3E%3Cpath%20d%3D%27M200%20155%20C160%2080%20100%2050%2040%2070%20C100%2070%20150%20105%20202%20168%20Z%27/%3E%3Cpath%20d%3D%27M198%20154%20C185%2090%20150%2040%20110%2020%20C150%2060%20172%20105%20200%20168%20Z%27/%3E%3Cpath%20d%3D%27M202%20154%20C225%2090%20270%2050%20320%2055%20C270%2070%20235%20110%20204%20168%20Z%27/%3E%3Cpath%20d%3D%27M204%20156%20C250%20100%20330%20100%20355%20170%20C318%20128%20250%20125%20204%20168%20Z%27/%3E%3Cpath%20d%3D%27M204%20160%20C260%20150%20320%20190%20340%20260%20C305%20205%20255%20185%20202%20172%20Z%27/%3E%3Cpath%20d%3D%27M198%20160%20C140%20150%2080%20195%2060%20265%20C95%20205%20145%20185%20200%20172%20Z%27/%3E%3Cpath%20d%3D%27M200%20152%20C196%20100%20205%2055%20232%2020%20C218%2062%20212%20105%20206%20164%20Z%27/%3E%3Ccircle%20cx%3D%27195%27%20cy%3D%27170%27%20r%3D%277%27/%3E%3Ccircle%20cx%3D%27210%27%20cy%3D%27172%27%20r%3D%277%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") right -3vw bottom -2vh / auto 52vh no-repeat,
-    radial-gradient(circle 15vmin at 50% 100%, #ffe58a 0, #ffb347 60%, #ff7a3d 98%, transparent 100%),
-    radial-gradient(circle 70vmin at 50% 100%, rgba(255, 138, 61, 0.6) 0, rgba(255, 46, 136, 0.28) 45%, transparent 100%),
-    linear-gradient(180deg, var(--noche) 0%, #2a0b52 38%, #7a1a8f 70%, #d6246f 100%);
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.12), transparent 30%),
+    linear-gradient(180deg, #edf4ff 0%, var(--bg-color) 100%);
+  color: var(--text-color);
+  line-height: 1.7;
 }
 
-/* ---------- Encabezado ---------- */
-header {
-  width: min(1100px, 100% - 2rem);
-  margin: 0 auto;
-  padding: 2.5rem 0 1.75rem;
-  text-align: center;
+img {
+  max-width: 100%;
+  display: block;
 }
 
-/* Título: el elemento memorable (degradado de atardecer con relieve) */
-header h1,
-body > h1 {
-  margin: 0;
-  font-family: var(--fuente-titulo);
-  font-weight: 400;
-  font-size: clamp(3rem, 12vw, 7.5rem);
-  line-height: 0.95;
-  text-transform: uppercase;
-  background: var(--atardecer);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(20, 6, 43, 0.35);
-  filter: drop-shadow(0 5px 0 rgba(20, 6, 43, 0.55)) drop-shadow(0 0 26px rgba(255, 46, 136, 0.45));
-  animation: entrada-titulo 0.9s ease-out both;
-}
-
-header > p {
-  max-width: 52ch;
-  margin: 1rem auto 0;
-  font-size: 1.15rem;
-}
-
-/* Páginas de ejercicio: encabezado alineado a la izquierda, título más compacto */
-header > a ~ h1 {
-  font-size: clamp(2rem, 6.5vw, 3.9rem);
-  line-height: 1;
-  text-align: left;
-  -webkit-text-stroke-width: 1px;
-}
-
-header > a ~ p {
-  max-width: none;
-  margin: 1rem 0 0;
-  text-align: left;
-}
-
-/* Enlace de regreso */
-header > a {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  padding: 0.35rem 1rem;
-  font-family: var(--fuente-menu);
-  font-weight: 600;
-  font-size: 1.05rem;
+a {
+  color: var(--primary-color);
   text-decoration: none;
-  color: var(--crema);
-  background: rgba(20, 6, 43, 0.55);
-  border: 2px solid var(--oceano);
-  border-radius: 999px;
-  transition: background 0.2s, color 0.2s;
-}
-header > a:hover {
-  background: var(--oceano);
-  color: var(--noche);
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-/* Temas del ejercicio */
-#etiquetas {
-  display: inline-block;
-  padding: 0.3rem 0.9rem;
-  font-family: var(--fuente-menu);
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--amarillo);
-  background: rgba(255, 46, 136, 0.18);
-  border-left: 4px solid var(--rosa);
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
 }
 
-/* ---------- Estructura ---------- */
+p,
+ul,
+ol,
+h1,
+h2,
+h3,
+label,
+button,
+input,
+textarea {
+  margin-top: 0;
+}
+
+header,
 main {
-  width: min(1100px, 100% - 2rem);
+  width: min(var(--max-width), calc(100% - 2rem));
   margin: 0 auto;
+}
+
+header {
+  padding: 3rem 0 1.5rem;
+}
+
+header > * {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--soft-shadow);
+  margin-top: 1.5rem;
+  padding: 2rem 1.5rem 1.5rem;
+  backdrop-filter: blur(8px);
+}
+
+main {
+  display: grid;
+  gap: 1.5rem;
   padding-bottom: 3rem;
 }
 
-/* Paneles: cada sección toma su color de rol con --acento */
 section {
-  --acento: var(--rosa);
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
-  background: var(--panel);
-  border: 2px solid var(--acento);
-  border-radius: 6px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 255, 0.96));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--soft-shadow);
+  padding: 1.6rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-#controles  { --acento: var(--sol); }
-#resultado  { --acento: var(--oceano); background: var(--hud); }
-
-/* index */
-#seccionEjemplos { --acento: var(--rosa); }
-#seccionTaller   { --acento: var(--sol); }
-#seccionReto     { --acento: var(--oceano); }
-
-/* Ejercicios: enunciado a la izquierda, entrada y resultados a la derecha */
-@media (min-width: 900px) {
-  main:has(#enunciado) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 1.5rem;
-    align-items: start;
-  }
-  main:has(#enunciado) > section { margin: 0; }
-  #enunciado { grid-row: 1 / span 2; }
+section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 45px rgba(37, 99, 235, 0.12);
 }
 
-/* ---------- Tipografía ---------- */
-h2, h3 {
-  margin: 0 0 0.75rem;
-  font-family: var(--fuente-menu);
+header h1 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: clamp(2.2rem, 5vw, 3.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  color: #0f172a;
+}
+
+header h1 {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+header p {
+  margin: 0;
+  color: var(--muted-color);
+  font-size: 1.08rem;
+}
+
+#etiquetas {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  color: var(--primary-dark);
+  font-size: 0.85rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--acento, var(--sol));
 }
-h2 { font-size: 1.9rem; line-height: 1.1; }
-h3 { font-size: 1.4rem; }
 
-p { margin: 0 0 1rem; }
+section h2 {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.2;
+}
 
-a { color: var(--oceano); text-underline-offset: 3px; }
-a:hover { color: var(--crema); }
+section p,
+section li {
+  color: var(--text-color);
+}
 
 code {
-  padding: 0.1rem 0.4rem;
-  font-family: var(--fuente-mono);
-  font-size: 0.92em;
-  color: var(--sol);
-  background: rgba(255, 138, 61, 0.15);
-  border-radius: 3px;
+  background: #eef2ff;
+  color: var(--primary-dark);
+  border-radius: 8px;
+  padding: 0.18rem 0.5rem;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.95em;
 }
 
-/* "Restricción:" y "Reto adicional:" */
-#enunciado p > strong { color: var(--amarillo); }
-
-/* Listas del enunciado: rombos rosa */
-section ul {
-  margin: 0 0 1rem;
-  padding: 0;
-  list-style: none;
-}
-section ul > li {
-  position: relative;
-  margin-bottom: 0.5rem;
-  padding-left: 1.4rem;
-}
-section ul > li::before {
-  content: "";
-  position: absolute;
-  left: 0.1rem;
-  top: 0.62em;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: var(--rosa);
-  transform: rotate(45deg);
+ul {
+  padding-left: 1.3rem;
 }
 
-/* ---------- index: taller y accesos ---------- */
-#seccionTaller ul {
+li + li {
+  margin-top: 0.55rem;
+}
+
+#seccionTaller ul,
+#enunciado ul {
+  list-style: disc;
+}
+
+form {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.8rem;
-  margin: 0;
-}
-#seccionTaller li { margin: 0; padding: 0; }
-#seccionTaller li::before { display: none; }
-
-#seccionTaller li a {
-  display: block;
-  height: 100%;
-  padding: 0.9rem 1.1rem;
-  font-family: var(--fuente-menu);
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 1.25;
-  text-decoration: none;
-  color: var(--crema);
-  background: rgba(255, 255, 255, 0.06);
-  border-left: 6px solid var(--rosa);
-  border-radius: 4px;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
-}
-#seccionTaller li a:hover,
-#seccionTaller li a:focus-visible {
-  background: linear-gradient(135deg, var(--rosa), var(--sol));
-  border-left-color: var(--crema);
-  color: var(--noche);
+  gap: 1rem;
 }
 
-/* Enlaces de "Ejemplos" y "Reto final": se ven como botón */
-section > p > a {
-  display: inline-block;
-  padding: 0.75rem 1.6rem;
-  font-family: var(--fuente-menu);
-  font-weight: 700;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--noche);
-  background: var(--atardecer);
-  border-radius: 4px;
-  box-shadow: 0 4px 0 #7a1a8f, 0 0 18px rgba(255, 46, 136, 0.5);
-  transition: transform 0.12s, filter 0.2s;
-}
-section > p > a:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-/* ---------- Formularios ---------- */
 label {
-  display: block;
-  max-width: 60ch;
-  margin: 0 0 0.4rem;
-  font-family: var(--fuente-menu);
-  font-weight: 600;
-  font-size: 1.1rem;
-  line-height: 1.3;
-  color: var(--crema);
+  font-weight: 700;
+  color: var(--text-color);
 }
 
 input,
 textarea {
-  display: block;
   width: 100%;
-  max-width: 440px;
-  margin: 0 0 1.1rem;
-  padding: 0.7rem 0.9rem;
-  font: inherit;
-  color: var(--crema);
-  background: rgba(255, 255, 255, 0.07);
-  border: 2px solid rgba(255, 243, 230, 0.35);
-  border-radius: 4px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-
-/* Listas de datos separadas por comas: monoespaciada */
-textarea {
-  max-width: 100%;
-  min-height: 5rem;
-  font-family: var(--fuente-mono);
-  font-size: 0.98rem;
-  resize: vertical;
-}
-
-input::placeholder,
-textarea::placeholder { color: rgba(255, 243, 230, 0.45); }
 
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--oceano);
-  box-shadow: 0 0 0 3px rgba(45, 226, 230, 0.35);
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  transform: translateY(-1px);
 }
 
-/* ---------- Botones ---------- */
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
 button {
-  display: inline-block;
-  padding: 0.75rem 1.6rem;
-  font-family: var(--fuente-menu);
-  font-weight: 700;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  color: var(--noche);
-  background: var(--atardecer);
-  border: 0;
-  border-radius: 4px;
+  width: fit-content;
+  padding: 0.92rem 1.45rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 4px 0 #7a1a8f, 0 0 18px rgba(255, 46, 136, 0.5);
-  transition: transform 0.12s, box-shadow 0.12s, filter 0.2s;
+  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
-button:hover { filter: brightness(1.1); }
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 26px rgba(20, 184, 166, 0.18);
+  filter: brightness(1.02);
+}
+
 button:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #7a1a8f, 0 0 12px rgba(255, 46, 136, 0.5);
+  transform: translateY(0);
 }
 
-a:focus-visible,
-button:focus-visible {
-  outline: 3px solid var(--oceano);
-  outline-offset: 3px;
+#resultado p {
+  margin-bottom: 0.7rem;
 }
 
-/* ---------- Resultados de los ejercicios (HUD) ---------- */
+#resultado strong {
+  color: var(--primary-dark);
+}
+
 #mensaje {
-  margin: 0 0 1.25rem;
-  padding: 0.8rem 1rem;
-  background: rgba(45, 226, 230, 0.1);
-  border-left: 4px solid var(--oceano);
+  color: var(--muted-color);
+  font-style: italic;
+  border-left: 4px solid rgba(37, 99, 235, 0.25);
+  padding-left: 0.8rem;
 }
 
-/* Cada dato: etiqueta a la izquierda, valor a la derecha (como pantalla de estadísticas) */
-#resultado p:has(> strong) {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  margin: 0;
-  padding: 0.55rem 0;
-  border-bottom: 1px dashed rgba(255, 243, 230, 0.2);
-}
-#resultado p:has(> strong):last-child { border-bottom: 0; }
-
-#resultado p > strong {
-  font-family: var(--fuente-menu);
+header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.12);
   font-weight: 700;
-  font-size: 1.4rem;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  color: var(--amarillo);
+  color: var(--primary-dark);
 }
 
-/* Registros (historial, intentos, detalle por día…) */
-#resultado ul {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem;
-  font-family: var(--fuente-mono);
-  font-size: 0.97rem;
-  color: var(--oceano);
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 4px solid var(--oceano);
-  border-radius: 4px;
-}
-#resultado ul:empty { display: none; }
-#resultado ul > li {
-  margin: 0;
-  padding: 0.3rem 0 0.3rem 1.4rem;
-  border-bottom: 1px dashed rgba(45, 226, 230, 0.25);
-}
-#resultado ul > li:last-child { border-bottom: 0; }
-#resultado ul > li::before { background: var(--oceano); }
-
-/* ---------- ejemplos.html: contenido directo en el body ---------- */
-body > h1 {
-  padding: 3rem 1rem 1.5rem;
-  text-align: center;
-  font-size: clamp(2.4rem, 9vw, 5.5rem);
+header a:hover {
+  text-decoration: none;
+  background: rgba(37, 99, 235, 0.12);
 }
 
-body > form,
-body > ul,
-body > p {
-  width: min(760px, 100% - 2rem);
-  margin-left: auto;
-  margin-right: auto;
-}
+@media (max-width: 768px) {
+  header,
+  main {
+    width: min(var(--max-width), calc(100% - 1rem));
+  }
 
-body > form {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  padding: 1.5rem;
-  background: var(--panel);
-  border: 2px solid var(--sol);
-  border-radius: 6px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-}
+  header {
+    padding: 1.5rem 1rem;
+    margin-top: 0.75rem;
+  }
 
-p[id^="resultado"],
-ul[id^="lista"] {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  padding: 1rem 1.2rem;
-  font-family: var(--fuente-mono);
-  color: var(--oceano);
-  background: var(--hud);
-  border-left: 6px solid var(--oceano);
-  border-radius: 4px;
-}
-p[id^="resultado"]:empty,
-ul[id^="lista"]:empty { display: none; }
+  section {
+    padding: 1.1rem;
+  }
 
-ul[id^="lista"] { list-style: none; }
-ul[id^="lista"] > li {
-  padding: 0.25rem 0;
-  border-bottom: 1px dashed rgba(45, 226, 230, 0.25);
-}
-ul[id^="lista"] > li:last-child { border-bottom: 0; }
-
-/* ---------- Animación única: el título entra como tráiler ---------- */
-@keyframes entrada-titulo {
-  from { opacity: 0; transform: scale(1.12); letter-spacing: 0.08em; }
-  to   { opacity: 1; transform: scale(1);    letter-spacing: 0; }
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 700px) {
-  header { padding: 1.75rem 0 1.25rem; }
-  section { padding: 1.1rem; }
-  h2 { font-size: 1.6rem; }
-  input { max-width: 100%; }
-  #resultado p > strong { font-size: 1.25rem; }
-  body::before { background-size: auto 36vh, auto 30vh, auto, auto, auto; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
+  button {
+    width: 100%;
   }
 }
